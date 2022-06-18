@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+#./autogen.sh
+./configure \
+	$KISS_CONFIGURE \
+	--prefix=/usr
+make
+make install

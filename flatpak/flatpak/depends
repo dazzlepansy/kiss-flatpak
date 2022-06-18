@@ -8,3 +8,5 @@ libsoup
 libxml2
 ostree
 python
+libcap
+xdg-dbus-proxy

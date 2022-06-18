@@ -1,19 +1,24 @@
 #!/bin/sh -e
 
-for patch in *.patch; do
-    patch -p1 < "$patch"
-done
+#for patch in *.patch; do
+#    patch -p1 < "$patch"
+#done
 
 # Remove libcap dependency (used solely when bwrap is suid
 # root). User namespaces are much better, should be used
 # in place of libcap and are free.
-sed -i 's/as_fn_error.*libcap/: "/g'          configure
-sed -i 's/as_fn_error.*capability\.h/: "/g' configure
+sed -e 's/as_fn_error.*libcap/: "/g' \
+	-e 's/as_fn_error.*capability\.h/: "/g' \
+	configure > _
+mv -f _ configure
 
 # Remove fuse2 dependency (used solely with root "system-helper"
 # daemon for file transfer. Unneeded in our case and drops the
 # old fuse version.
-sed -i 's/as_fn_error.*fuse/: "/g' configure
+sed 's/as_fn_error.*fuse/: "/g' configure > _
+mv -f _ configure
+
+chmod +x configure
 
 # Turn the fuse2 filesystem into a C program which does nothing.
 # This is the easiest way to "turn off" revokefs as there's
@@ -58,7 +63,9 @@ export PYTHONPATH
     --disable-sandboxed-triggers \
     --disable-documentation \
     --disable-introspection \
-    --with-priv-mode=none
+    --with-priv-mode=none \
+    --disable-xauth \
+    --with-system-dbus-proxy
 
 make
 make DESTDIR="$1" install

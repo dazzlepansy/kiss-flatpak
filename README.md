@@ -1,5 +1,9 @@
 # flatpak for kiss
 
+Forked from [mmatongo/kiss-flatpak](https://github.com/mmatongo/kiss-flatpak) which was in turn forked from [dylanaraps/kiss-flatpak](https://github.com/dylanaraps/kiss-flatpak). Neither repo was building for me, which probably isn't surprising given their age and the pace of changes to KISS itself, so I forked the most recent one and attempted to fix all the build failures.
+
+Even though this builds correctly, I still couldn't launch any Flatpaks that required dbus such as LibreOffice. I found that installing dbus and then launching the Flatpak with `dbus-launch --exit-with-session flatpak run --user org.libreoffice.LibreOffice` does the trick.
+
 INSTRUCTIONS
 
 ```

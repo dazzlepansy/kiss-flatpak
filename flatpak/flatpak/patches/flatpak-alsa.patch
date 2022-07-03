@@ -1,22 +1,5 @@
-From 4b28611ab6e4c144af0599c39c5aedfb15a25a4c Mon Sep 17 00:00:00 2001
-From: Forest <forestcode@ixio.org>
-Date: Mon, 27 Jan 2020 17:03:37 -0800
-Subject: [PATCH] Support --device=snd, for ALSA-only systems.
-
-This allows sound on non-PulseAudio systems, without requiring --device=all.
----
- common/flatpak-context-private.h | 1 +
- common/flatpak-context.c         | 1 +
- common/flatpak-run.c             | 7 +++++++
- doc/flatpak-build-finish.xml     | 4 ++--
- doc/flatpak-build.xml            | 4 ++--
- doc/flatpak-metadata.xml         | 7 +++++++
- doc/flatpak-override.xml         | 4 ++--
- doc/flatpak-run.xml              | 4 ++--
- 8 files changed, 24 insertions(+), 8 deletions(-)
-
 diff --git a/common/flatpak-context-private.h b/common/flatpak-context-private.h
-index 48995b497..41b5f952d 100644
+index 8a56537..61b5cda 100644
 --- a/common/flatpak-context-private.h
 +++ b/common/flatpak-context-private.h
 @@ -50,6 +50,7 @@ typedef enum {
@@ -28,7 +11,7 @@ index 48995b497..41b5f952d 100644
  
  typedef enum {
 diff --git a/common/flatpak-context.c b/common/flatpak-context.c
-index 58cee2a74..3c227f86e 100644
+index 34510c1..f3dafec 100644
 --- a/common/flatpak-context.c
 +++ b/common/flatpak-context.c
 @@ -70,6 +70,7 @@ const char *flatpak_context_devices[] = {
@@ -40,12 +23,12 @@ index 58cee2a74..3c227f86e 100644
  };
  
 diff --git a/common/flatpak-run.c b/common/flatpak-run.c
-index 24ec48e43..1108cf62e 100644
+index 7d916eb..7b932fc 100644
 --- a/common/flatpak-run.c
 +++ b/common/flatpak-run.c
-@@ -1272,6 +1272,13 @@ flatpak_run_add_environment_args (FlatpakBwrap    *bwrap,
-           if (real_dev_shm != NULL)
-               flatpak_bwrap_add_args (bwrap, "--bind", real_dev_shm, "/dev/shm", NULL);
+@@ -1718,6 +1718,13 @@ flatpak_run_add_environment_args (FlatpakBwrap    *bwrap,
+                                   "--bind", shared_dev_shm, "/dev/shm",
+                                   NULL);
          }
 +
 +      if (context->devices & FLATPAK_CONTEXT_DEVICE_SND)
@@ -56,9 +39,9 @@ index 24ec48e43..1108cf62e 100644
 +        }
      }
  
-   flatpak_context_append_bwrap_filesystem (context, bwrap, app_id, app_id_dir, previous_app_id_dirs, &exports);
+   exports = flatpak_context_get_exports_full (context,
 diff --git a/doc/flatpak-build-finish.xml b/doc/flatpak-build-finish.xml
-index d92eeb4de..2c8f64ba2 100644
+index b2b138f..454f3d8 100644
 --- a/doc/flatpak-build-finish.xml
 +++ b/doc/flatpak-build-finish.xml
 @@ -162,7 +162,7 @@
@@ -80,7 +63,7 @@ index d92eeb4de..2c8f64ba2 100644
                  </para></listitem>
              </varlistentry>
 diff --git a/doc/flatpak-build.xml b/doc/flatpak-build.xml
-index 55e3ec89e..51ffb007b 100644
+index a48e2ac..1e1aece 100644
 --- a/doc/flatpak-build.xml
 +++ b/doc/flatpak-build.xml
 @@ -172,7 +172,7 @@
@@ -102,10 +85,10 @@ index 55e3ec89e..51ffb007b 100644
                  </para></listitem>
              </varlistentry>
 diff --git a/doc/flatpak-metadata.xml b/doc/flatpak-metadata.xml
-index 7e445ac1d..a1610a6ba 100644
+index 2d853ad..b83118d 100644
 --- a/doc/flatpak-metadata.xml
 +++ b/doc/flatpak-metadata.xml
-@@ -180,6 +180,13 @@
+@@ -182,6 +182,13 @@
                                  Available since 0.6.12.
                              </para></listitem></varlistentry>
  
@@ -120,7 +103,7 @@ index 7e445ac1d..a1610a6ba 100644
                              <listitem><para>
                                  All device nodes in <filename>/dev</filename>, but not /dev/shm (which is separately specified).
 diff --git a/doc/flatpak-override.xml b/doc/flatpak-override.xml
-index 8f1315756..7826456c0 100644
+index ed1ba52..aa14efb 100644
 --- a/doc/flatpak-override.xml
 +++ b/doc/flatpak-override.xml
 @@ -154,7 +154,7 @@
@@ -142,10 +125,10 @@ index 8f1315756..7826456c0 100644
                  </para></listitem>
              </varlistentry>
 diff --git a/doc/flatpak-run.xml b/doc/flatpak-run.xml
-index 5077c1a9c..828c176a8 100644
+index 90df07e..90d34ab 100644
 --- a/doc/flatpak-run.xml
 +++ b/doc/flatpak-run.xml
-@@ -294,7 +294,7 @@
+@@ -301,7 +301,7 @@
                  <listitem><para>
                      Expose a device to the application. This overrides to
                      the Context section from the application metadata.
@@ -154,7 +137,7 @@ index 5077c1a9c..828c176a8 100644
                      This option can be used multiple times.
                  </para></listitem>
              </varlistentry>
-@@ -305,7 +305,7 @@
+@@ -312,7 +312,7 @@
                  <listitem><para>
                      Don't expose a device to the application. This overrides to
                      the Context section from the application metadata.

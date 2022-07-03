@@ -1,12 +1,11 @@
 appstream-glib
 gdk-pixbuf
 glib
-gpgme
 gnupg1
+gpgme
 libarchive
 libsoup
 libxml2
 ostree
 python
-libcap
 xdg-dbus-proxy

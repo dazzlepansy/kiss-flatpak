@@ -3,6 +3,7 @@
 ./configure \
     --prefix=/usr \
     --disable-gtk-doc \
+    --disable-http2 \
     --disable-man \
     --disable-rofiles-fuse \
     --without-soup \

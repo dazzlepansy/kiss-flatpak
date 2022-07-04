@@ -4,7 +4,9 @@
     --prefix=/usr \
     --disable-gtk-doc \
     --disable-man \
-    --disable-rofiles-fuse
+    --disable-rofiles-fuse \
+    --without-soup \
+    --with-curl
 
 make
 make DESTDIR="$1" install

@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 
-cd AppStream-0.15.4
+cd "AppStream-$2"
+
+for file in ../patches/* ; do
+	patch -p1 < "$file"
+done
 
 mkdir build
 cd build

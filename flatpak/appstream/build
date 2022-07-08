@@ -6,6 +6,11 @@ for file in ../patches/* ; do
 	patch -p1 < "$file"
 done
 
+# Don't build the docs and languages, which pull in a lot of dependencies.
+sed -e "s/^subdir('po\/')/#subdir('po\/')/" \
+	-e "s/^subdir('docs\/')/#subdir('docs\/')/" meson.build > _
+mv -f _ meson.build
+
 mkdir build
 cd build
 

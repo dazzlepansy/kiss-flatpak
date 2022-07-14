@@ -65,7 +65,7 @@ export PYTHONPATH
     --disable-introspection \
     --with-priv-mode=none \
     --disable-xauth \
-    --with-system-dbus-proxy
+    --without-system-dbus-proxy
 
 make
 make DESTDIR="$1" install

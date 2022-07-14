@@ -1,0 +1,17 @@
+diff --git a/common/flatpak-utils-http.c b/common/flatpak-utils-http.c
+index 8bf2e70..3aa9b08 100644
+--- a/common/flatpak-utils-http.c
++++ b/common/flatpak-utils-http.c
+@@ -384,10 +384,10 @@ flatpak_create_http_session (const char *user_agent)
+    * there are numerous HTTP/2 fixes since the original version in
+    * libcurl 7.43.0.
+    */
+-#if CURL_AT_LEAST_VERSION(7, 51, 0)
++/*#if CURL_AT_LEAST_VERSION(7, 51, 0)
+   rc = curl_easy_setopt (curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+   g_assert_cmpint (rc, ==, CURLM_OK);
+-#endif
++#endif*/
+   /* https://github.com/curl/curl/blob/curl-7_53_0/docs/examples/http2-download.c */
+ #if (CURLPIPE_MULTIPLEX > 0)
+   /* wait for pipe connection to confirm */

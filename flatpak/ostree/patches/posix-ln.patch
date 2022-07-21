@@ -1,0 +1,77 @@
+diff --git a/Makefile-tests.am b/Makefile-tests.am
+index 29de6c7..af0d433 100644
+--- a/Makefile-tests.am
++++ b/Makefile-tests.am
+@@ -415,7 +415,7 @@ EXTRA_DIST += \
+ 
+ tests/libreaddir-rand.so: Makefile
+ 	mkdir -p tests/
+-	$(AM_V_GEN) ln -fns ../.libs/libreaddir-rand.so tests/
++	$(AM_V_GEN) ln -fs ../.libs/libreaddir-rand.so tests/
+ ALL_LOCAL_RULES += tests/libreaddir-rand.so
+ CLEANFILES += tests/libreaddir-rand.so tests/ostree-symlink-stamp \
+ 		tests/ostree-prepare-root-symlink-stamp tests/ostree-remount-symlink-stamp \
+diff --git a/Makefile.in b/Makefile.in
+index 6312f3e..d1a9f8b 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -9934,7 +9934,7 @@ src/ostree/parse-datetime.c: src/ostree/parse-datetime.y Makefile
+ 
+ tests/libreaddir-rand.so: Makefile
+ 	mkdir -p tests/
+-	$(AM_V_GEN) ln -fns ../.libs/libreaddir-rand.so tests/
++	$(AM_V_GEN) ln -fs ../.libs/libreaddir-rand.so tests/
+ 
+ tests/%-symlink-stamp: % Makefile
+ 	$(AM_V_GEN) set -e; \
+diff --git a/tests/admin-test.sh b/tests/admin-test.sh
+index 366dece..da38730 100644
+--- a/tests/admin-test.sh
++++ b/tests/admin-test.sh
+@@ -362,7 +362,7 @@ echo "ok remote add physical sysroot"
+ 
+ # Now a hack...symlink ${deployment}/sysroot to the sysroot in lieu of a bind
+ # mount which we can't do in unit tests.
+-ln -sr sysroot ${deployment}/sysroot
++ln -s sysroot ${deployment}/sysroot
+ ln -s sysroot/ostree ${deployment}/ostree
+ ${CMD_PREFIX} ostree --sysroot=${deployment} remote add --set=gpg-verify=false remote-test-nonphysical file://$(pwd)/testos-repo
+ assert_not_file_has_content sysroot/ostree/repo/config remote-test-nonphysical
+diff --git a/tests/basic-test.sh b/tests/basic-test.sh
+index 04506c3..18725f0 100644
+--- a/tests/basic-test.sh
++++ b/tests/basic-test.sh
+@@ -609,9 +609,9 @@ $OSTREE cat test2 /yet/another/tree/green > greenfile-contents
+ assert_file_has_content greenfile-contents "leaf"
+ $OSTREE checkout test2 checkout-test2
+ ls -alR checkout-test2
+-ln -sr checkout-test2/{four,four-link}
+-ln -sr checkout-test2/{baz/cow,cow-link}
+-ln -sr checkout-test2/{cow-link,cow-link-link}
++ln -s checkout-test2/{four,four-link}
++ln -s checkout-test2/{baz/cow,cow-link}
++ln -s checkout-test2/{cow-link,cow-link-link}
+ $OSTREE commit -b test2-withlink --tree=dir=checkout-test2
+ if $OSTREE cat test2-withlink /four-link 2>err.txt; then
+     assert_not_reached "cat directory"
+diff --git a/tests/libtest.sh b/tests/libtest.sh
+index 686f08d..c481f61 100755
+--- a/tests/libtest.sh
++++ b/tests/libtest.sh
+@@ -315,13 +315,13 @@ setup_fake_remote_repo2() {
+     mkdir repo
+     ostree_repo_init repo --mode=$mode
+     # Backcompat
+-    ln -sr repo gnomerepo
++    ln -s repo gnomerepo
+     # Initialize content
+     mkdir files
+     cd files
+     mkdir -p usr/{etc,bin,lib,share}
+-    ln -sr usr/bin bin
+-    ln -sr usr/lib lib
++    ln -s usr/bin bin
++    ln -s usr/lib lib
+     tar xf ${test_srcdir}/fah-deltadata-old.tar.xz
+     remote_ref=exampleos/42/x86_64/main
+     cd ..

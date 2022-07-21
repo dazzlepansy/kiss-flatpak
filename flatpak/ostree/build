@@ -1,5 +1,9 @@
 #!/bin/sh -e
 
+for file in patches/* ; do
+	patch -p1 < "$file"
+done
+
 ./configure \
     --prefix=/usr \
     --disable-gtk-doc \

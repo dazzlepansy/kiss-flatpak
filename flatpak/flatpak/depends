@@ -2,7 +2,6 @@ appstream
 curl
 gdk-pixbuf
 glib
-gnupg1
 gpgme
 libarchive
 libxml2

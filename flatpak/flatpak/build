@@ -18,6 +18,13 @@ mv -f _ configure
 sed 's/as_fn_error.*fuse/: "/g' configure > _
 mv -f _ configure
 
+# The build keeps failing because it's looking for /usr/local/include
+# and I just can't figure out where it's getting that path.
+# In lieu of the right config option, we can just not throw an error
+# if an include directory is missing.
+sed '/-Werror=missing-include-dirs/d' configure > _
+mv -f _ configure
+
 chmod +x configure
 
 # Turn the fuse2 filesystem into a C program which does nothing.

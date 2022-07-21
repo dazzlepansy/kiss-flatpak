@@ -27,6 +27,7 @@ meson \
     -Dvapi=false \
     -Dapt-support=false \
     -Dgir=false \
+    -Dlibxmlb:introspection=false \
     ..
 
 ninja
